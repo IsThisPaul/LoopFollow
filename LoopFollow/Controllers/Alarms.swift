@@ -865,18 +865,17 @@ extension MainViewController {
         self.lastSpeechTime = currentTime
 
         let bloodGlucoseDifference = currentValue - previousValue
-        let negligibleThreshold = 3
         let differenceText: String
 
-        if abs(bloodGlucoseDifference) <= negligibleThreshold {
-            differenceText = "stable"
+        if abs(bloodGlucoseDifference) == 0 {
+            differenceText = "no change"
         } else {
             let direction = bloodGlucoseDifference < 0 ? "down" : "up"
             let absoluteDifference = bgUnits.toDisplayUnits(String(abs(bloodGlucoseDifference)))
             differenceText = "\(direction) \(absoluteDifference)"
         }
 
-        let announcementText = "Current BG is \(bgUnits.toDisplayUnits(String(currentValue))), and it is \(differenceText)"
+        let announcementText = "\(bgUnits.toDisplayUnits(String(currentValue))), \(differenceText)"
         let speechUtterance = AVSpeechUtterance(string: announcementText)
         speechUtterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         speechSynthesizer.speak(speechUtterance)
